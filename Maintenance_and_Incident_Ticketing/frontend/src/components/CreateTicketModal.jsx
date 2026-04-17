@@ -35,7 +35,7 @@ const CreateTicketModal = ({ onClose, onSuccess }) => {
     setError(null);
 
     const submitData = new FormData();
-    // Convert text inputs to JSON blob for @RequestPart
+    // Convert text inputs to JSON blob for @RequestParam in Spring Boot
     submitData.append('ticketData', new Blob([JSON.stringify(formData)], { type: 'application/json' }));
     
     files.forEach(file => {
