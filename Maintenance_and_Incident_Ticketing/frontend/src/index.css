@@ -173,6 +173,12 @@ body {
   color: white;
 }
 
+.btn-pill {
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  border-radius: 50px;
+}
+
 /* Forms */
 .input-field {
   width: 100%;

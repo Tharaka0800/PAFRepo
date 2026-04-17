@@ -74,9 +74,8 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
         {['ALL', 'OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED', 'REJECTED'].map((status) => (
           <button 
             key={status}
-            className={`btn ${filter === status ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn btn-pill ${filter === status ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => setFilter(status)}
-            style={{ padding: '6px 16px', fontSize: '0.8rem', borderRadius: '50px' }}
           >
             {status.replace('_', ' ')}
           </button>
