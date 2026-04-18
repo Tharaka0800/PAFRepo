@@ -43,7 +43,7 @@ const TicketDetailsPage = ({ ticketId, onBack }) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': 'admin_default' // Admin doing update
+          'X-User-Id': 'admin_default' // Admin doing the update
         },
         body: JSON.stringify(payload)
       });
