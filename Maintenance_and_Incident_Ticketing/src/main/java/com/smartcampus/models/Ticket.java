@@ -30,7 +30,9 @@ public class Ticket {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Ticket() {}
+    public Ticket() {
+        this.createdAt = LocalDateTime.now(); // Equivalent to @PrePersist for setting default
+    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
