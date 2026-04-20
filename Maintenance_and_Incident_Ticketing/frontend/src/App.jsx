@@ -83,8 +83,9 @@ function App() {
 
         <main className="main-content">
           <div className="app-container">
-        {currentView === 'dashboard' && (
+        {(currentView === 'dashboard' || currentView === 'tasks') && (
           <TicketDashboard 
+            activeView={currentView === 'tasks' ? 'MY_TASKS' : 'ALL'}
             onCreateNew={() => setShowCreateModal(true)} 
             onViewTicket={handleViewTicket} 
           />

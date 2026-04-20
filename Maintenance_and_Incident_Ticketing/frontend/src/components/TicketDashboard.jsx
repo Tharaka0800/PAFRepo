@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchWithAuth } from '../config/api';
 //create ticket modal is imported in parent component (App.jsx) and passed as prop to this component, so no need to import here
-const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
+const TicketDashboard = ({ activeView = 'ALL', onCreateNew, onViewTicket }) => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
@@ -22,7 +22,12 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
     }
   };
 
-  const displayedTickets = tickets.filter(t => filter === 'ALL' || t.status === filter);
+  const displayedTickets = tickets.filter(t => {
+    if (activeView === 'MY_TASKS') {
+      return t.userId === 'user_123'; // Replace 'user_123' with actual logged-in user ID later
+    }
+    return filter === 'ALL' || t.status === filter;
+  });
 
   const stats = {
     open: tickets.filter(t => t.status === 'OPEN').length,
