@@ -5,6 +5,7 @@ const TicketDashboard = ({ activeView = 'ALL', onCreateNew, onViewTicket }) => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadTickets();
@@ -23,10 +24,17 @@ const TicketDashboard = ({ activeView = 'ALL', onCreateNew, onViewTicket }) => {
   };
 
   const displayedTickets = tickets.filter(t => {
+    const matchesSearch = 
+      t.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.id.toLowerCase().includes(searchTerm.toLowerCase());
+
     if (activeView === 'MY_TASKS') {
-      return t.userId === 'user_123'; // Replace 'user_123' with actual logged-in user ID later
+      return t.userId === 'user_123' && matchesSearch;
     }
-    return filter === 'ALL' || t.status === filter;
+    
+    const matchesStatus = filter === 'ALL' || t.status === filter;
+    return matchesStatus && matchesSearch;
   });
 
   const stats = {
@@ -102,6 +110,17 @@ const TicketDashboard = ({ activeView = 'ALL', onCreateNew, onViewTicket }) => {
         ))}
       </div>
 
+      <div className="search-container">
+        <span className="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Search by category, description, or ID..." 
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>Loading...</div>
       ) : displayedTickets.length === 0 ? (
@@ -118,6 +137,9 @@ const TicketDashboard = ({ activeView = 'ALL', onCreateNew, onViewTicket }) => {
             >
               <div className="ticket-card-header">
                 <div>
+                  <div className="ticket-id-badge" style={{marginBottom: '8px'}}>
+                    #TKT-{ticket.id.substring(0, 5).toUpperCase()}
+                  </div>
                   <h3 className="ticket-card-title">{ticket.category}</h3>
                   <div className="ticket-card-meta">{ticket.resourceLocation}</div>
                 </div>

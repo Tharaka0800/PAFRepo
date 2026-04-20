@@ -100,7 +100,9 @@ const TicketDetailsPage = ({ ticketId, onBack }) => {
         {/* Main Details */}
         <div className="glass-panel">
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px'}}>
-            <h1 style={{margin: 0, color: 'var(--primary-color)'}}>Ticket #{ticket.id.slice(0, 8)}</h1>
+            <div className="ticket-id-badge">
+              #TKT-{ticket.id.substring(0, 5).toUpperCase()}
+            </div>
             <span className={getStatusBadgeClass(ticket.status)}>
               {ticket.status.replace('_', ' ')}
             </span>
