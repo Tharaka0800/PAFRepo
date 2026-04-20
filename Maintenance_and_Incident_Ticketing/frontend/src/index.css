@@ -20,12 +20,25 @@
   
   --glass-shadow: 0 4px 12px rgba(124, 58, 237, 0.08);
   --glass-border: 1px solid var(--purple-light);
+
+  --sidebar-bg: #ffffff;
+  --primary-purple: #9333ea;
+  --sidebar-text: #1e293b;
+  --sidebar-muted: #94a3b8;
+  --active-bg: #f5f3ff;
+  --border-subtle: #f1f5f9;
+
+  /* The main deep, rich purple from your screenshot */
+  --charm-purple: #7c3aed; 
+  --dark-purple: #5b21b6;
+  --sidebar-text-muted: #ddd6fe;
+  --main-bg-color: #f8fafc;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: var(--bg-color);
+  background: var(--main-bg-color);
   color: var(--text-dark);
   min-height: 100vh;
 }
@@ -37,83 +50,88 @@ body {
   width: 100%;
 }
 
-.sidebar {
-  width: 210px;
-  background: linear-gradient(160deg, var(--purple-dark) 0%, var(--purple-mid) 60%, var(--purple-main) 100%);
-  color: white;
+.main-sidebar {
+  width: 280px;
+  height: 100vh;
+  /* Use a subtle gradient to make it look expensive */
+  background: linear-gradient(180deg, var(--charm-purple) 0%, var(--dark-purple) 100%);
   display: flex;
   flex-direction: column;
-  position: fixed;
+  padding: 32px 16px;
+  position: sticky;
   top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 100;
-  box-shadow: 4px 0 15px rgba(59, 7, 100, 0.15);
+  color: white;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .sidebar-brand {
-  padding: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 40px;
+  padding-left: 12px;
 }
 
-.brand-logo {
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-.sidebar-brand h2 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
+.brand-text {
+  font-size: 1.4rem;
   color: white;
+  letter-spacing: -0.5px;
 }
 
-.sidebar-user {
-  margin-top: auto;
-  padding: 20px 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.brand-text .bold { 
+  font-weight: 800; 
+}
+
+.group-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--sidebar-text-muted);
+  margin: 24px 0 12px 12px;
+  letter-spacing: 1.2px; /* Professional spacing for labels */
+}
+
+.nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  color: var(--sidebar-text-muted);
+  font-weight: 500;
+  margin-bottom: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.user-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--purple-light);
+/* Smooth Hover Effect */
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(5px);
 }
 
-.user-text {
-  display: flex;
-  flex-direction: column;
+/* The White Pill Active State (As requested) */
+.nav-item.active {
+  background: #ffffff;
+  color: var(--charm-purple);
+  font-weight: 700;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.user-name {
-  font-size: 0.85rem;
-  font-weight: 600;
+.nav-icon {
+  margin-right: 14px;
+  font-size: 1.2rem;
 }
 
-.user-id {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
+.footer-nav {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .main-content {
   flex: 1;
-  margin-left: 210px;
   padding: 32px;
-  max-width: calc(100% - 210px);
   box-sizing: border-box;
 }
 
@@ -456,4 +474,50 @@ body {
 .timeline-content {
   flex: 1;
   padding-top: 5px;
+}
+
+.ticket-id-badge {
+  background: rgba(124, 58, 237, 0.08); /* Very light purple */
+  color: #7c3aed; /* Your main purple */
+  padding: 6px 14px;
+  border-radius: 6px;
+  /* Monospaced font looks more professional for IDs */
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-weight: 800;
+  font-size: 0.8rem;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.search-container {
+  position: relative;
+  margin-bottom: 24px;
+  max-width: 500px;
+}
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sidebar-muted);
+  font-size: 1.1rem;
+}
+.search-input {
+  width: 100%;
+  padding: 12px 12px 12px 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  background: white;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--charm-purple);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.15);
+  width: 105%; /* Slight expansion effect */
 }

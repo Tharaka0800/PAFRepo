@@ -3,6 +3,8 @@ import TicketDashboard from './components/TicketDashboard';
 import CreateTicketModal from './components/CreateTicketModal';
 import TicketDetailsPage from './components/TicketDetailsPage';
 import './index.css';
+import { GraduationCap, LayoutDashboard, Ticket as TicketIcon, CheckSquare, Building, Calendar, Settings } from 'lucide-react';
+
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -32,24 +34,58 @@ function App() {
   return (
     <>
       <div className="app-layout">
-        <aside className="sidebar">
+        <aside className="main-sidebar">
           <div className="sidebar-brand">
-            <div className="brand-logo">SC</div>
-            <h2>Smart Campus</h2>
+            <div className="brand-icon"><GraduationCap size={28} /></div>
+            <span className="brand-text">Smart<span className="bold">Campus</span></span>
           </div>
-          <div className="sidebar-user">
-            <div className="user-avatar"></div>
-            <div className="user-text">
-              <div className="user-name">John Doe (Student)</div>
-              <div className="user-id">ID: user_123</div>
+
+          <nav className="sidebar-nav">
+            {/* Group 1: Core Operations */}
+            <div className="nav-group">
+              <p className="group-label">WORKSPACE</p>
+              <div className={`nav-item ${currentView === 'tasks' ? 'active' : ''}`} onClick={() => setCurrentView('tasks')}>
+                <span className="nav-icon"><LayoutDashboard size={20} /></span>
+                <span>My Tasks</span>
+              </div>
+              <div className={`nav-item ${(currentView === 'dashboard' || currentView === 'details' || currentView === 'refresh') ? 'active' : ''}`} onClick={() => setCurrentView('dashboard')}>
+                <span className="nav-icon"><TicketIcon size={20} /></span>
+                <span>All Tickets</span>
+              </div>
+              <div className={`nav-item ${currentView === 'completed' ? 'active' : ''}`} onClick={() => setCurrentView('completed')}>
+                <span className="nav-icon"><CheckSquare size={20} /></span>
+                <span>Completed</span>
+              </div>
             </div>
-          </div>
+
+            {/* Group 2: General Campus Info */}
+            <div className="nav-group">
+              <p className="group-label">CAMPUS SERVICES</p>
+              <div className="nav-item">
+                <span className="nav-icon"><Building size={20} /></span>
+                <span>Facilities</span>
+              </div>
+              <div className="nav-item">
+                <span className="nav-icon"><Calendar size={20} /></span>
+                <span>Schedule</span>
+              </div>
+            </div>
+
+            {/* Bottom Section: Personal */}
+            <div className="nav-group footer-nav">
+              <div className="nav-item">
+                <span className="nav-icon"><Settings size={20} /></span>
+                <span>Account Settings</span>
+              </div>
+            </div>
+          </nav>
         </aside>
 
         <main className="main-content">
           <div className="app-container">
-        {currentView === 'dashboard' && (
+        {(currentView === 'dashboard' || currentView === 'tasks') && (
           <TicketDashboard 
+            activeView={currentView === 'tasks' ? 'MY_TASKS' : 'ALL'}
             onCreateNew={() => setShowCreateModal(true)} 
             onViewTicket={handleViewTicket} 
           />
