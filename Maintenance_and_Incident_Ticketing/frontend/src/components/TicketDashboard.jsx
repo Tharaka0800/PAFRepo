@@ -115,9 +115,19 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', borderTop: '1px solid var(--purple-light)', paddingTop: '12px' }}>
                 <span>Priority: <strong style={{color: ticket.priority === 'HIGH' || ticket.priority === 'CRITICAL' ? 'var(--danger-color)' : 'inherit'}}>{ticket.priority}</strong></span>
                 <span>
-                  {ticket.createdAt && ticket.createdAt !== 0
-                    ? new Date(ticket.createdAt).toLocaleDateString('en-GB') 
-                    : 'No Date Set'}
+                  <div style={{ fontWeight: '500' }}>
+                    {ticket.createdAt && ticket.createdAt !== 0
+                      ? new Date(ticket.createdAt).toLocaleString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                          hour12: true 
+                        })
+                      : 'Waiting for timestamp...'}
+                  </div>
                 </span>
               </div>
             </div>

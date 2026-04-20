@@ -1,6 +1,7 @@
 package com.smartcampus.models;
 
 import org.springframework.data.annotation.CreatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,7 +26,8 @@ public class Ticket {
     private String userId; // Owner of the ticket
     
     @CreatedDate
-    private LocalDateTime createdAt;
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime createdAt = LocalDateTime.now();
     
     @LastModifiedDate
     private LocalDateTime updatedAt;
