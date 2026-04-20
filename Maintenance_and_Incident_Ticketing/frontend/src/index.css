@@ -27,12 +27,18 @@
   --sidebar-muted: #94a3b8;
   --active-bg: #f5f3ff;
   --border-subtle: #f1f5f9;
+
+  /* The main deep, rich purple from your screenshot */
+  --charm-purple: #7c3aed; 
+  --dark-purple: #5b21b6;
+  --sidebar-text-muted: #ddd6fe;
+  --main-bg-color: #f8fafc;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: var(--bg-color);
+  background: var(--main-bg-color);
   color: var(--text-dark);
   min-height: 100vh;
 }
@@ -47,13 +53,15 @@ body {
 .main-sidebar {
   width: 280px;
   height: 100vh;
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--border-subtle);
+  /* Use a subtle gradient to make it look expensive */
+  background: linear-gradient(180deg, var(--charm-purple) 0%, var(--dark-purple) 100%);
   display: flex;
   flex-direction: column;
-  padding: 32px 20px;
+  padding: 32px 16px;
   position: sticky;
   top: 0;
+  color: white;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 
@@ -67,7 +75,7 @@ body {
 
 .brand-text {
   font-size: 1.4rem;
-  color: var(--primary-purple);
+  color: white;
   letter-spacing: -0.5px;
 }
 
@@ -76,48 +84,49 @@ body {
 }
 
 .group-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--sidebar-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--sidebar-text-muted);
   margin: 24px 0 12px 12px;
-  letter-spacing: 0.05em;
+  letter-spacing: 1.2px; /* Professional spacing for labels */
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  border-radius: 10px;
-  color: var(--sidebar-text);
+  padding: 14px 18px;
+  border-radius: 14px;
+  color: var(--sidebar-text-muted);
   font-weight: 500;
-  margin-bottom: 4px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 6px;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
-/* Hover Effect: Soft Slide */
+/* Smooth Hover Effect */
 .nav-item:hover {
-  background: var(--active-bg);
-  color: var(--primary-purple);
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(5px);
 }
 
-/* Active State: Bold Purple with Shadow */
+/* The White Pill Active State (As requested) */
 .nav-item.active {
-  background: var(--primary-purple);
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.25);
+  background: #ffffff;
+  color: var(--charm-purple);
+  font-weight: 700;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.nav-icon { 
-  margin-right: 14px; 
-  font-size: 1.2rem; 
+.nav-icon {
+  margin-right: 14px;
+  font-size: 1.2rem;
 }
 
 .footer-nav {
   margin-top: auto;
   padding-top: 20px;
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .main-content {

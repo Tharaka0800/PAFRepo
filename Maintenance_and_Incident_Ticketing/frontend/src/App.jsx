@@ -3,6 +3,8 @@ import TicketDashboard from './components/TicketDashboard';
 import CreateTicketModal from './components/CreateTicketModal';
 import TicketDetailsPage from './components/TicketDetailsPage';
 import './index.css';
+import { GraduationCap, LayoutDashboard, Ticket as TicketIcon, CheckSquare, Building, Calendar, Settings } from 'lucide-react';
+
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -34,7 +36,7 @@ function App() {
       <div className="app-layout">
         <aside className="main-sidebar">
           <div className="sidebar-brand">
-            <div className="brand-icon">🎓</div>
+            <div className="brand-icon"><GraduationCap size={28} /></div>
             <span className="brand-text">Smart<span className="bold">Campus</span></span>
           </div>
 
@@ -42,16 +44,16 @@ function App() {
             {/* Group 1: Core Operations */}
             <div className="nav-group">
               <p className="group-label">WORKSPACE</p>
-              <div className="nav-item active">
-                <span className="nav-icon">📊</span>
+              <div className={`nav-item ${currentView === 'tasks' ? 'active' : ''}`} onClick={() => setCurrentView('tasks')}>
+                <span className="nav-icon"><LayoutDashboard size={20} /></span>
                 <span>My Tasks</span>
               </div>
-              <div className="nav-item">
-                <span className="nav-icon">🎫</span>
+              <div className={`nav-item ${(currentView === 'dashboard' || currentView === 'details' || currentView === 'refresh') ? 'active' : ''}`} onClick={() => setCurrentView('dashboard')}>
+                <span className="nav-icon"><TicketIcon size={20} /></span>
                 <span>All Tickets</span>
               </div>
-              <div className="nav-item">
-                <span className="nav-icon">✅</span>
+              <div className={`nav-item ${currentView === 'completed' ? 'active' : ''}`} onClick={() => setCurrentView('completed')}>
+                <span className="nav-icon"><CheckSquare size={20} /></span>
                 <span>Completed</span>
               </div>
             </div>
@@ -60,11 +62,11 @@ function App() {
             <div className="nav-group">
               <p className="group-label">CAMPUS SERVICES</p>
               <div className="nav-item">
-                <span className="nav-icon">🏢</span>
+                <span className="nav-icon"><Building size={20} /></span>
                 <span>Facilities</span>
               </div>
               <div className="nav-item">
-                <span className="nav-icon">📅</span>
+                <span className="nav-icon"><Calendar size={20} /></span>
                 <span>Schedule</span>
               </div>
             </div>
@@ -72,7 +74,7 @@ function App() {
             {/* Bottom Section: Personal */}
             <div className="nav-group footer-nav">
               <div className="nav-item">
-                <span className="nav-icon">👤</span>
+                <span className="nav-icon"><Settings size={20} /></span>
                 <span>Account Settings</span>
               </div>
             </div>
