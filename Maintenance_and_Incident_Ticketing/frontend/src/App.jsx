@@ -32,18 +32,51 @@ function App() {
   return (
     <>
       <div className="app-layout">
-        <aside className="sidebar">
+        <aside className="main-sidebar">
           <div className="sidebar-brand">
-            <div className="brand-logo">SC</div>
-            <h2>Smart Campus</h2>
+            <div className="brand-icon">🎓</div>
+            <span className="brand-text">Smart<span className="bold">Campus</span></span>
           </div>
-          <div className="sidebar-user">
-            <div className="user-avatar"></div>
-            <div className="user-text">
-              <div className="user-name">John Doe (Student)</div>
-              <div className="user-id">ID: user_123</div>
+
+          <nav className="sidebar-nav">
+            {/* Group 1: Core Operations */}
+            <div className="nav-group">
+              <p className="group-label">WORKSPACE</p>
+              <div className="nav-item active">
+                <span className="nav-icon">📊</span>
+                <span>My Tasks</span>
+              </div>
+              <div className="nav-item">
+                <span className="nav-icon">🎫</span>
+                <span>All Tickets</span>
+              </div>
+              <div className="nav-item">
+                <span className="nav-icon">✅</span>
+                <span>Completed</span>
+              </div>
             </div>
-          </div>
+
+            {/* Group 2: General Campus Info */}
+            <div className="nav-group">
+              <p className="group-label">CAMPUS SERVICES</p>
+              <div className="nav-item">
+                <span className="nav-icon">🏢</span>
+                <span>Facilities</span>
+              </div>
+              <div className="nav-item">
+                <span className="nav-icon">📅</span>
+                <span>Schedule</span>
+              </div>
+            </div>
+
+            {/* Bottom Section: Personal */}
+            <div className="nav-group footer-nav">
+              <div className="nav-item">
+                <span className="nav-icon">👤</span>
+                <span>Account Settings</span>
+              </div>
+            </div>
+          </nav>
         </aside>
 
         <main className="main-content">
