@@ -71,6 +71,21 @@ const TicketDetailsPage = ({ ticketId, onBack }) => {
     }
   };
 
+  const formatDateTime = (dateVal) => {
+    if (!dateVal || dateVal === 0) return 'Waiting for timestamp...';
+    try {
+      const d = Array.isArray(dateVal) 
+        ? new Date(dateVal[0], dateVal[1] - 1, dateVal[2], dateVal[3] || 0, dateVal[4] || 0, dateVal[5] || 0)
+        : new Date(dateVal);
+      return isNaN(d.getTime()) ? 'Waiting for timestamp...' : d.toLocaleString('en-GB', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+      });
+    } catch (e) {
+      return 'Waiting for timestamp...';
+    }
+  };
+
   if (loading) return <div style={{textAlign: 'center', padding: '40px'}}>Loading ticket details...</div>;
   if (error) return <div style={{color: 'red', textAlign: 'center'}}>{error}</div>;
   if (!ticket) return null;
@@ -107,17 +122,7 @@ const TicketDetailsPage = ({ ticketId, onBack }) => {
             <div>
               <div className="label">Created Date</div>
               <div style={{ fontWeight: '500' }}>
-                {ticket.createdAt && ticket.createdAt !== 0
-                  ? new Date(ticket.createdAt).toLocaleString('en-GB', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                      hour12: true 
-                    })
-                  : 'Waiting for timestamp...'}
+                {formatDateTime(ticket.createdAt)}
               </div>
             </div>
           </div>

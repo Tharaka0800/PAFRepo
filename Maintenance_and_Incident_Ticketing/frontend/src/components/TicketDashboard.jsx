@@ -42,6 +42,21 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
     }
   };
 
+  const formatDateTime = (dateVal) => {
+    if (!dateVal || dateVal === 0) return 'Waiting for timestamp...';
+    try {
+      const d = Array.isArray(dateVal) 
+        ? new Date(dateVal[0], dateVal[1] - 1, dateVal[2], dateVal[3] || 0, dateVal[4] || 0, dateVal[5] || 0)
+        : new Date(dateVal);
+      return isNaN(d.getTime()) ? 'Waiting for timestamp...' : d.toLocaleString('en-GB', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+      });
+    } catch (e) {
+      return 'Waiting for timestamp...';
+    }
+  };
+
   return (
     <div className="glass-panel" style={{ animation: 'fadeIn 0.5s' }}>
       <div className="header">
@@ -116,17 +131,7 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
                 <span>Priority: <strong style={{color: ticket.priority === 'HIGH' || ticket.priority === 'CRITICAL' ? 'var(--danger-color)' : 'inherit'}}>{ticket.priority}</strong></span>
                 <span>
                   <div style={{ fontWeight: '500' }}>
-                    {ticket.createdAt && ticket.createdAt !== 0
-                      ? new Date(ticket.createdAt).toLocaleString('en-GB', {
-                          day: '2-digit',
-                          month: '2-digit',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          second: '2-digit',
-                          hour12: true 
-                        })
-                      : 'Waiting for timestamp...'}
+                    {formatDateTime(ticket.createdAt)}
                   </div>
                 </span>
               </div>
