@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { fetchWithAuth } from '../config/api';
 //create ticket modal is imported in parent component (App.jsx) and passed as prop to this component, so no need to import here
-const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
+const TicketDashboard = ({ activeView = 'ALL', onCreateNew, onViewTicket }) => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadTickets();
@@ -22,7 +23,19 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
     }
   };
 
-  const displayedTickets = tickets.filter(t => filter === 'ALL' || t.status === filter);
+  const displayedTickets = tickets.filter(t => {
+    const matchesSearch = 
+      t.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.id.toLowerCase().includes(searchTerm.toLowerCase());
+
+    if (activeView === 'MY_TASKS') {
+      return t.userId === 'user_123' && matchesSearch;
+    }
+    
+    const matchesStatus = filter === 'ALL' || t.status === filter;
+    return matchesStatus && matchesSearch;
+  });
 
   const stats = {
     open: tickets.filter(t => t.status === 'OPEN').length,
@@ -39,6 +52,21 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
       case 'CLOSED': return 'badge badge-closed';
       case 'REJECTED': return 'badge badge-rejected';
       default: return 'badge';
+    }
+  };
+
+  const formatDateTime = (dateVal) => {
+    if (!dateVal || dateVal === 0) return 'Waiting for timestamp...';
+    try {
+      const d = Array.isArray(dateVal) 
+        ? new Date(dateVal[0], dateVal[1] - 1, dateVal[2], dateVal[3] || 0, dateVal[4] || 0, dateVal[5] || 0)
+        : new Date(dateVal);
+      return isNaN(d.getTime()) ? 'Waiting for timestamp...' : d.toLocaleString('en-GB', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+      });
+    } catch (e) {
+      return 'Waiting for timestamp...';
     }
   };
 
@@ -82,6 +110,17 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
         ))}
       </div>
 
+      <div className="search-container">
+        <span className="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Search by category, description, or ID..." 
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>Loading...</div>
       ) : displayedTickets.length === 0 ? (
@@ -98,6 +137,9 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
             >
               <div className="ticket-card-header">
                 <div>
+                  <div className="ticket-id-badge" style={{marginBottom: '8px'}}>
+                    #TKT-{ticket.id.substring(0, 5).toUpperCase()}
+                  </div>
                   <h3 className="ticket-card-title">{ticket.category}</h3>
                   <div className="ticket-card-meta">{ticket.resourceLocation}</div>
                 </div>
@@ -115,9 +157,9 @@ const TicketDashboard = ({ onCreateNew, onViewTicket }) => {
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', borderTop: '1px solid var(--purple-light)', paddingTop: '12px' }}>
                 <span>Priority: <strong style={{color: ticket.priority === 'HIGH' || ticket.priority === 'CRITICAL' ? 'var(--danger-color)' : 'inherit'}}>{ticket.priority}</strong></span>
                 <span>
-                  {ticket.createdAt && ticket.createdAt !== 0
-                    ? new Date(ticket.createdAt).toLocaleDateString('en-GB') 
-                    : 'No Date Set'}
+                  <div style={{ fontWeight: '500' }}>
+                    {formatDateTime(ticket.createdAt)}
+                  </div>
                 </span>
               </div>
             </div>
