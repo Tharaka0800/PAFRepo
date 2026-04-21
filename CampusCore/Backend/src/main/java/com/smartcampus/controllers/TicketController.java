@@ -26,7 +26,7 @@ import com.smartcampus.services.FileUploadService;
 import com.smartcampus.services.TicketService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RequestMapping("/api/v1/tickets")
 public class TicketController {
 
