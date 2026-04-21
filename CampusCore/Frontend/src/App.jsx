@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TicketDashboard from './components/TicketDashboard';
 import TechnicianDashboard from './components/TechnicianDashboard';
+import AdminDashboard from './components/AdminDashboard';
 import CreateTicketModal from './components/CreateTicketModal';
 import TicketDetailsPage from './components/TicketDetailsPage';
 import Login from './components/Login';
@@ -87,7 +88,7 @@ function App() {
             <HomePage onLaunchDashboard={() => setCurrentView('dashboard')} />
           )}
 
-          {currentView === 'dashboard' && user.role !== 'TECHNICIAN' && (
+          {currentView === 'dashboard' && user.role !== 'TECHNICIAN' && user.role !== 'ADMIN' && (
             <TicketDashboard 
               onCreateNew={() => setShowCreateModal(true)} 
               onViewTicket={handleViewTicket} 
@@ -96,6 +97,13 @@ function App() {
 
           {currentView === 'dashboard' && user.role === 'TECHNICIAN' && (
             <TechnicianDashboard 
+              user={user}
+              onViewTicket={handleViewTicket} 
+            />
+          )}
+
+          {currentView === 'dashboard' && user.role === 'ADMIN' && (
+            <AdminDashboard 
               user={user}
               onViewTicket={handleViewTicket} 
             />
