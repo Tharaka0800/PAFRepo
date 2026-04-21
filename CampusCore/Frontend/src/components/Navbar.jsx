@@ -65,7 +65,7 @@ const Navbar = ({ currentView, onNavigate, user, onLogout }) => {
 
                     <div className="navbar-user-profile" style={{ border: 'none', paddingLeft: 0 }}>
                         <div className="navbar-avatar">
-                            {user.username.charAt(0).toUpperCase()}
+                            {(user && user.username) ? user.username.charAt(0).toUpperCase() : ""}
                         </div>
                         <button 
                             onClick={onLogout}
