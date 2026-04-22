@@ -28,7 +28,7 @@ const TechnicianDashboard = ({ user, onViewTicket }) => {
   const handleAssign = async (id) => {
     try {
       await fetchWithAuth(`/tickets/${id}/assign`, {
-        method: 'PATCH', // Used PATCH per your request (Note: if backend uses @PUT, this might need to change to PUT)
+        method: 'PUT', // Changed to PUT to match backend @PutMapping
         headers: {
           'Content-Type': 'application/json',
         },
