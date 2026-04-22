@@ -74,7 +74,7 @@ const BookingWorkflow = ({ token, username, role }) => {
     };
 
     return (
-        <div className="glass-panel" style={{ animation: 'fadeIn 0.5s' }}>
+        <div style={{ padding: "28px 32px", width: "100%", minHeight: "100vh", background: "#f0eef8" }}>
             <div className="header">
                 <h1>Facility Bookings</h1>
                 <button onClick={() => setShowModal(true)} className="btn btn-primary">
