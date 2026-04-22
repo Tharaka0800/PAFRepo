@@ -90,6 +90,7 @@ function App() {
 
           {currentView === 'dashboard' && user.role !== 'TECHNICIAN' && user.role !== 'ADMIN' && (
             <TicketDashboard 
+              user={user}
               onCreateNew={() => setShowCreateModal(true)} 
               onViewTicket={handleViewTicket} 
             />

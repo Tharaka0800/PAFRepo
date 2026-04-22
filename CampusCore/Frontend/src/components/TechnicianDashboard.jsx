@@ -102,12 +102,35 @@ const TechnicianDashboard = ({ user, onViewTicket }) => {
   );
 
   return (
-    <div className="glass-panel" style={{ animation: 'fadeIn 0.5s' }}>
+    <div style={{
+      background: "#f0eef8",
+      minHeight: "100vh",
+      padding: "28px 32px",
+      width: "100%",
+    }}>
       <div className="header" style={{ marginBottom: '32px' }}>
         <h1>Technician Dashboard</h1>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 24 }}>
+        {[
+          { label: "ASSIGNED TO ME", val: activeTasks.length, color: "#6c3fe0" },
+          { label: "OPEN JOBS", val: availableJobs.length, color: "#f59e0b" },
+          { label: "COMPLETED TODAY", val: completedHistory.length, color: "#10b981" },
+          { label: "HIGH PRIORITY", val: tickets.filter(t => t.priority === 'HIGH' || t.priority === 'CRITICAL').length, color: "#ef4444" },
+        ].map(s => (
+          <div key={s.label} style={{ background: "#fff", borderRadius: 12, padding: "18px 20px", borderTop: `3px solid ${s.color}`, border: "0.5px solid #e8e4f4" }}>
+            <div style={{ fontSize: 10, fontWeight: 500, letterSpacing: ".08em", color: "#9b98b5", textTransform: "uppercase", marginBottom: 10 }}>{s.label}</div>
+            <div style={{ fontSize: 30, fontWeight: 500, color: "#1a1a2e" }}>{s.val}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+        gap: 16,
+      }}>
         {/* Column 1: Available Jobs */}
         <div style={{ background: 'var(--purple-bg)', padding: '20px', borderRadius: '12px', border: 'var(--glass-border)' }}>
           <h2 style={{ fontSize: '1.2rem', color: 'var(--purple-dark)', marginBottom: '20px', borderBottom: '2px solid var(--purple-light)', paddingBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>

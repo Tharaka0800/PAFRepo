@@ -800,3 +800,303 @@ body {
   opacity: 0.4;
   border-radius: 50%;
 }
+
+/* --- Full-Width Dashboard Layout --- */
+
+.dashboard-container {
+    width: 95%;           /* Occupies almost the full width of the screen */
+    max-width: 1800px;    /* Prevents it from becoming too wide on huge monitors */
+    margin: 20px auto;    /* Centers the content */
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    min-height: 80vh;     /* Ensures it looks tall and professional */
+}
+
+/* Ensure the Navbar and Footer match this width */
+.navbar-content, .footer-content {
+    width: 95%;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Spreads cards into 4 equal columns */
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.technician-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 wide columns */
+    gap: 30px;
+}
+
+.admin-table {
+    width: 100%; /* The table will now span the full 95% of the container */
+    border-collapse: collapse;
+}
+
+/* --- 3-Column Ticket Dashboard Layout --- */
+
+.ticket-dashboard-3col {
+  display: flex;
+  gap: 24px;
+  background-color: #f0eef8;
+  min-height: 100vh;
+  padding: 24px;
+  margin: -40px; /* Counteract the padding from app-container */
+}
+
+/* Left Sidebar */
+.ticket-sidebar-left {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+
+.ticket-nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.ticket-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: #4b5563;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 4px solid transparent;
+}
+
+.ticket-nav-item:hover {
+  background-color: rgba(108, 63, 224, 0.05);
+  color: #6c3fe0;
+}
+
+.ticket-nav-item.active {
+  background-color: rgba(108, 63, 224, 0.1);
+  color: #6c3fe0;
+  border-left-color: #6c3fe0;
+}
+
+.ticket-user-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.ticket-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #6c3fe0;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.ticket-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-user-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1f2937;
+}
+
+.ticket-user-role {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+/* Main Content */
+.ticket-main-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Right Sidebar */
+.ticket-sidebar-right {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ticket-panel-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.ticket-panel-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Custom Overrides for this dashboard to match #6c3fe0 */
+.ticket-dashboard-3col .btn-primary {
+  background: #6c3fe0;
+}
+.ticket-dashboard-3col .btn-primary:hover {
+  background: #5b35bc;
+}
+.ticket-dashboard-3col .stat-border-open { border-top-color: #6c3fe0; }
+.ticket-dashboard-3col .search-container:focus-within {
+  border-color: #6c3fe0;
+  box-shadow: 0 4px 12px rgba(108, 63, 224, 0.1);
+}
+
+.category-bar-row {
+  margin-bottom: 12px;
+}
+.category-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  color: #4b5563;
+  font-weight: 500;
+}
+.category-bar-track {
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.category-bar-fill {
+  height: 100%;
+  background: #6c3fe0;
+  border-radius: 4px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+}
+.activity-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(108, 63, 224, 0.1);
+  color: #6c3fe0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.activity-content {
+  flex: 1;
+}
+.activity-time {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.hp-ticket {
+  padding: 12px;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.hp-ticket-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+.hp-ticket-id {
+  font-weight: 700;
+  color: #1f2937;
+}
+.hp-ticket-priority {
+  color: #ef4444;
+  font-weight: 600;
+}
+.hp-ticket-desc {
+  font-size: 0.8rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Global Enterprise Portal Layout Update --- */
+
+/* The main wrapper for the entire application */
+.app-container {
+    display: flex !important; /* Override previous blocks */
+    width: 100vw;       /* Full viewport width */
+    height: 100vh;      /* Full viewport height */
+    overflow: hidden;   /* Prevents the entire page from scrolling weirdly */
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 260px;       /* Fixed professional width */
+    height: 100vh;
+    background: linear-gradient(180deg, #4c1d95 0%, #7c3aed 100%);
+    flex-shrink: 0;     /* Prevents sidebar from squishing */
+    display: flex !important; /* Enable if previously hidden */
+    flex-direction: column;
+}
+
+/* The area where your Dashboard lives */
+.main-content-wrapper {
+    flex-grow: 1;       /* Occupies 100% of the remaining horizontal space */
+    background-color: #f8fafc;
+    overflow-y: auto;   /* Allows only the content to scroll vertically */
+    padding: 0;         /* Removes the gaps on the sides */
+}
+
+/* Dashboard Content Expansion */
+.incident-dashboard {
+    width: 100%;
+    padding: 30px;      /* Internal spacing for a clean look */
+}
+
+/* Spread the stats cards across the full width */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns across the screen */
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 30px;
+}

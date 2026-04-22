@@ -80,7 +80,13 @@ const AdminDashboard = ({ user, onViewTicket }) => {
   const resolvedCount = tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length;
 
   return (
-    <div className="glass-panel" style={{ animation: 'fadeIn 0.5s', maxWidth: '100%', overflowX: 'hidden' }}>
+    <div style={{
+      animation: 'fadeIn 0.5s',
+      background: "#f0eef8",
+      minHeight: "100vh",
+      padding: "28px 32px",
+      width: "100%",
+    }}>
       
       {/* Dynamic CSS for the table hover effect within component to ensure UX independence */}
       <style>{`
@@ -130,7 +136,7 @@ const AdminDashboard = ({ user, onViewTicket }) => {
       </div>
 
       {/* Top Row: Statistics */}
-      <div className="stats-container">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, width: "100%", marginBottom: "30px" }}>
         <div className="stat-card" style={{ borderTop: '4px solid var(--purple-main)' }}>
           <div className="stat-icon">📊</div>
           <div className="stat-card-title">Total Tickets</div>
@@ -158,7 +164,7 @@ const AdminDashboard = ({ user, onViewTicket }) => {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px' }}>Loading Data...</div>
         ) : (
-          <table className="admin-table">
+          <table className="admin-table" style={{ width: "100%", tableLayout: "fixed" }}>
             <thead>
               <tr>
                 <th>ID</th>
