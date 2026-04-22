@@ -96,19 +96,18 @@ const TicketDashboard = ({ user, activeView = 'ALL', onCreateNew, onViewTicket }
   const navItems = ['My Tickets', 'All Tickets', 'Completed', 'Schedule', 'Account'];
 
   return (
-    <div className="ticket-dashboard-3col">
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "240px 1fr 300px",
+      gap: "24px",
+      minHeight: "100vh",
+      width: "100%",
+      background: "#f0eef8",
+      padding: "24px"
+    }}>
       {/* Left Sidebar */}
       <div className="ticket-sidebar-left">
-        <div style={{
-          padding: "20px 16px 10px",
-          fontSize: "0.75rem",
-          fontWeight: 700,
-          color: "#9ca3af",
-          letterSpacing: "1px",
-          textTransform: "uppercase"
-        }}>
-          Menu
-        </div>
+
         
         <div className="ticket-nav-menu">
           {navItems.map(item => (
