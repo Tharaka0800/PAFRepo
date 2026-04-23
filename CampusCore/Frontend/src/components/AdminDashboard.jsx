@@ -27,6 +27,8 @@ const AdminDashboard = ({ user, onViewTicket }) => {
 
   useEffect(() => {
     loadTickets();
+    const intervalId = setInterval(loadTickets, 60000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const loadTickets = async () => {
@@ -262,9 +264,14 @@ const AdminDashboard = ({ user, onViewTicket }) => {
                 <h2>Ticket review queue</h2>
                 <p>Filter, review, and moderate operational incidents from one place.</p>
               </div>
-              <div className="admin-chip">
-                <Filter size={14} />
-                {filteredTickets.length} visible
+              <div className="admin-panel-controls">
+                <button className="btn btn-secondary btn-pill admin-refresh-btn" onClick={loadTickets}>
+                  Refresh
+                </button>
+                <div className="admin-chip">
+                  <Filter size={14} />
+                  {filteredTickets.length} visible
+                </div>
               </div>
             </div>
 
@@ -355,7 +362,7 @@ const AdminDashboard = ({ user, onViewTicket }) => {
                         <td>{formatDate(ticket.createdAt)}</td>
                         <td>
                           <div className="admin-action-row">
-                            <button className="btn btn-pill btn-primary" onClick={() => onViewTicket(ticket.id)}>
+                            <button className="btn btn-pill btn-primary admin-review-btn" onClick={() => onViewTicket(ticket.id)}>
                               Review
                             </button>
                             {ticket.status !== 'REJECTED' &&

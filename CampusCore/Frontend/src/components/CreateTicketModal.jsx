@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, getCurrentUserFromToken } from '../config/api';
 
 const CreateTicketModal = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -43,10 +43,11 @@ const CreateTicketModal = ({ onClose, onSuccess }) => {
     });
 
     try {
+      const currentUser = getCurrentUserFromToken();
       const response = await fetch(`${API_BASE_URL}/tickets`, {
         method: 'POST',
         headers: {
-          'X-User-Id': 'user_123',
+          'X-User-Id': currentUser?.username || 'anonymous_user',
           // Note: Do not set Content-Type to multipart/form-data manually, browser needs to set the exact boundary
         },
         body: submitData
