@@ -78,6 +78,7 @@ const TicketDetailsRoute = ({ user }) => {
   return (
     <TicketDetailsPage
       ticketId={ticketId}
+      user={user}
       onBack={() => navigate(getDashboardPath(user.role))}
     />
   );
@@ -337,7 +338,7 @@ function App() {
           element={
             <ProtectedRoute user={user} authReady={authReady}>
               <AuthenticatedLayout user={user} token={token} onLogout={handleLogout}>
-                <NotificationsPanel token={token} role={user?.role} />
+                <NotificationsPanel token={token} role={user?.role} user={user} />
               </AuthenticatedLayout>
             </ProtectedRoute>
           }

@@ -22,6 +22,8 @@ public class Ticket {
     private String rejectionReason;
     private String resolutionNotes;
     private String assignedTechnicianId;
+    private String assignmentNotes;
+    private String assignedByAdminId;
     private List<String> attachmentUrls;
     private String userId; // Owner of the ticket
     
@@ -65,6 +67,12 @@ public class Ticket {
 
     public String getAssignedTechnicianId() { return assignedTechnicianId; }
     public void setAssignedTechnicianId(String assignedTechnicianId) { this.assignedTechnicianId = assignedTechnicianId; }
+
+    public String getAssignmentNotes() { return assignmentNotes; }
+    public void setAssignmentNotes(String assignmentNotes) { this.assignmentNotes = assignmentNotes; }
+
+    public String getAssignedByAdminId() { return assignedByAdminId; }
+    public void setAssignedByAdminId(String assignedByAdminId) { this.assignedByAdminId = assignedByAdminId; }
 
     public List<String> getAttachmentUrls() { return attachmentUrls; }
     public void setAttachmentUrls(List<String> attachmentUrls) { this.attachmentUrls = attachmentUrls; }

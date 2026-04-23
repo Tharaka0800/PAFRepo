@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-const NotificationsPanel = ({ token, role }) => {
+const NotificationsPanel = ({ token, role, user }) => {
     const [notifications, setNotifications] = useState([]);
     const [message, setMessage] = useState('');
     const [targetRole, setTargetRole] = useState('STUDENT');
@@ -24,6 +24,12 @@ const NotificationsPanel = ({ token, role }) => {
                     const newNotif = JSON.parse(message.body);
                     setNotifications(prev => [newNotif, ...prev]);
                 });
+                if (user?.username) {
+                    client.subscribe(`/topic/notifications/user/${user.username}`, (message) => {
+                        const newNotif = JSON.parse(message.body);
+                        setNotifications(prev => [newNotif, ...prev]);
+                    });
+                }
             },
             onStompError: (frame) => {
                 console.error('Broker reported error: ' + frame.headers['message']);
@@ -38,14 +44,21 @@ const NotificationsPanel = ({ token, role }) => {
                 client.deactivate();
             }
         };
-    }, [role]);
+    }, [role, user?.username]);
 
     const fetchNotifications = async () => {
         try {
             setLoading(true);
             let url = 'http://localhost:8080/api/notifications';
-            if (role !== 'ADMIN') {
-                url += `?role=${role}`;
+            const query = new URLSearchParams();
+            if (role) {
+                query.set('role', role);
+            }
+            if (user?.username) {
+                query.set('userId', user.username);
+            }
+            if (query.toString()) {
+                url += `?${query.toString()}`;
             }
             const res = await axios.get(url, config);
             setNotifications(res.data);
@@ -164,6 +177,11 @@ const NotificationsPanel = ({ token, role }) => {
                                 )}
                             </div>
                         </div>
+                        {notif.title && (
+                            <div style={{ fontWeight: 700, color: 'var(--purple-dark)', marginTop: '4px' }}>
+                                {notif.title}
+                            </div>
+                        )}
                         <p style={{ margin: '12px 0 0 0', color: 'var(--text-dark)', fontSize: '1rem', lineHeight: '1.5' }}>
                             {notif.message}
                         </p>

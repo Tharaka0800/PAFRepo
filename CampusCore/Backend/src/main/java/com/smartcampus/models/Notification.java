@@ -14,6 +14,8 @@ public class Notification {
     private String message;
 
     private Role targetRole;
+    private String recipientUserId;
+    private String title;
     private boolean isRead;
     private Date createdAt;
 
@@ -37,6 +39,12 @@ public class Notification {
 
     public Role getTargetRole() { return targetRole; }
     public void setTargetRole(Role targetRole) { this.targetRole = targetRole; }
+
+    public String getRecipientUserId() { return recipientUserId; }
+    public void setRecipientUserId(String recipientUserId) { this.recipientUserId = recipientUserId; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
     public boolean isRead() { return isRead; }
     public void setRead(boolean read) { isRead = read; }

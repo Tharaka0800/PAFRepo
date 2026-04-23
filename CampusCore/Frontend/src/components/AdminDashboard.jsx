@@ -130,7 +130,7 @@ const AdminDashboard = ({ user, onViewTicket }) => {
   const inProgressCount = tickets.filter((ticket) => ticket.status === 'IN_PROGRESS').length;
   const resolvedCount = tickets.filter((ticket) => ticket.status === 'RESOLVED' || ticket.status === 'CLOSED').length;
   const rejectedCount = tickets.filter((ticket) => ticket.status === 'REJECTED').length;
-  const pendingAssignments = tickets.filter((ticket) => ticket.status === 'OPEN' && !ticket.technicianId).length;
+  const pendingAssignments = tickets.filter((ticket) => ticket.status === 'OPEN' && !ticket.assignedTechnicianId).length;
   const criticalCount = tickets.filter((ticket) => ticket.priority === 'CRITICAL').length;
 
   const filteredTickets = tickets.filter((ticket) => {

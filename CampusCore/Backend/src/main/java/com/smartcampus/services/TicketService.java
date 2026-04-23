@@ -1,6 +1,8 @@
 package com.smartcampus.services;
 
 import com.smartcampus.exceptions.ResourceNotFoundException;
+import com.smartcampus.models.Notification;
+import com.smartcampus.models.Role;
 import com.smartcampus.models.Ticket;
 import com.smartcampus.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public Ticket createTicket(Ticket ticket, String userId) {
         ticket.setUserId(userId);
@@ -40,25 +45,64 @@ public class TicketService {
 
     public Ticket updateTicketStatus(String id, String status, String notes, String rejectionReason, String userId) {
         Ticket ticket = getTicketById(id);
-        
-        // Basic workflow transition logic could go here
+        String previousStatus = ticket.getStatus();
+
         ticket.setStatus(status);
         if (notes != null) ticket.setResolutionNotes(notes);
         if (rejectionReason != null) ticket.setRejectionReason(rejectionReason);
-        
-        return ticketRepository.save(ticket);
+
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        boolean technicianCompletedWork =
+                "RESOLVED".equals(status)
+                        && !"RESOLVED".equals(previousStatus)
+                        && userId != null
+                        && userId.equals(savedTicket.getAssignedTechnicianId())
+                        && savedTicket.getAssignedByAdminId() != null
+                        && !savedTicket.getAssignedByAdminId().isBlank();
+
+        if (technicianCompletedWork) {
+            Notification notification = new Notification();
+            notification.setTitle("Technician marked ticket as done");
+            notification.setMessage(String.format(
+                    "Ticket %s has been marked as done by technician %s.%s",
+                    savedTicket.getId(),
+                    userId,
+                    notes != null && !notes.isBlank() ? " Notes: " + notes : ""
+            ));
+            notification.setTargetRole(Role.ADMIN);
+            notification.setRecipientUserId(savedTicket.getAssignedByAdminId());
+            notificationService.createNotification(notification);
+        }
+
+        return savedTicket;
     }
 
-    public Ticket assignTechnician(String id, String technicianId, String adminUserId) {
-        // Admin user verification would happen via role eventually, left as placeholder for Module E
+    public Ticket assignTechnician(String id, String technicianId, String adminUserId, String assignmentNotes) {
         Ticket ticket = getTicketById(id);
         ticket.setAssignedTechnicianId(technicianId);
+        ticket.setAssignedByAdminId(adminUserId);
+        ticket.setAssignmentNotes(assignmentNotes);
         
         if ("OPEN".equals(ticket.getStatus())) {
             ticket.setStatus("IN_PROGRESS");
         }
-        
-        return ticketRepository.save(ticket);
+
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        Notification notification = new Notification();
+        notification.setTitle("New technician assignment");
+        notification.setMessage(String.format(
+                "You have been assigned ticket %s by admin %s.%s",
+                savedTicket.getId(),
+                adminUserId,
+                assignmentNotes != null && !assignmentNotes.isBlank() ? " Instruction: " + assignmentNotes : ""
+        ));
+        notification.setTargetRole(Role.TECHNICIAN);
+        notification.setRecipientUserId(technicianId);
+        notificationService.createNotification(notification);
+
+        return savedTicket;
     }
     
     public Ticket addAttachments(String id, List<String> fileUrls) {

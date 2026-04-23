@@ -6,6 +6,8 @@ import com.smartcampus.repositories.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +22,11 @@ public class NotificationService {
 
     public Notification createNotification(Notification notification) {
         Notification saved = notificationRepository.save(notification);
-        // Push notification to specific role topic
-        messagingTemplate.convertAndSend("/topic/notifications/" + saved.getTargetRole(), saved);
+        if (saved.getRecipientUserId() != null && !saved.getRecipientUserId().isBlank()) {
+            messagingTemplate.convertAndSend("/topic/notifications/user/" + saved.getRecipientUserId(), saved);
+        } else if (saved.getTargetRole() != null) {
+            messagingTemplate.convertAndSend("/topic/notifications/" + saved.getTargetRole(), saved);
+        }
         return saved;
     }
 
@@ -33,10 +38,31 @@ public class NotificationService {
         return notificationRepository.findAll();
     }
 
+    public List<Notification> getNotificationsForUser(Role role, String userId) {
+        List<Notification> notifications = new ArrayList<>();
+
+        if (role != null) {
+            notifications.addAll(notificationRepository.findByTargetRoleOrderByCreatedAtDesc(role));
+        }
+        if (userId != null && !userId.isBlank()) {
+            notifications.addAll(notificationRepository.findByRecipientUserIdOrderByCreatedAtDesc(userId));
+        }
+
+        notifications = notifications.stream()
+                .collect(java.util.stream.Collectors.toMap(Notification::getId, notification -> notification, (first, second) -> first))
+                .values()
+                .stream()
+                .toList();
+        notifications.sort(Comparator.comparing(Notification::getCreatedAt).reversed());
+        return notifications;
+    }
+
     public Optional<Notification> updateNotification(String id, Notification notificationDetails) {
         return notificationRepository.findById(id).map(existing -> {
             existing.setMessage(notificationDetails.getMessage());
             existing.setTargetRole(notificationDetails.getTargetRole());
+            existing.setRecipientUserId(notificationDetails.getRecipientUserId());
+            existing.setTitle(notificationDetails.getTitle());
             existing.setRead(notificationDetails.isRead());
             return notificationRepository.save(existing);
         });

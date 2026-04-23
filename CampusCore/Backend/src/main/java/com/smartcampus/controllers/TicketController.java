@@ -107,6 +107,7 @@ public class TicketController {
             @RequestHeader(value = "X-User-Id", defaultValue = "admin_default") String adminUserId) {
             
         String technicianId = payload.get("technicianId");
-        return ResponseEntity.ok(ticketService.assignTechnician(id, technicianId, adminUserId));
+        String assignmentNotes = payload.get("assignmentNotes");
+        return ResponseEntity.ok(ticketService.assignTechnician(id, technicianId, adminUserId, assignmentNotes));
     }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface NotificationRepository extends MongoRepository<Notification, String> {
     List<Notification> findByTargetRoleOrderByCreatedAtDesc(Role targetRole);
+    List<Notification> findByRecipientUserIdOrderByCreatedAtDesc(String recipientUserId);
 }

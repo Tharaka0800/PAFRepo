@@ -20,9 +20,12 @@ public class NotificationController {
 
     // GET all alerts (for Admin primarily) or limit by role natively on frontend
     @GetMapping
-    public List<Notification> getAllNotifications(@RequestParam(required = false) String role) {
-        if (role != null) {
-            return notificationService.getNotificationsByRole(Role.valueOf(role.toUpperCase()));
+    public List<Notification> getAllNotifications(
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String userId) {
+        if (role != null || userId != null) {
+            Role parsedRole = role != null ? Role.valueOf(role.toUpperCase()) : null;
+            return notificationService.getNotificationsForUser(parsedRole, userId);
         }
         return notificationService.getAllNotifications();
     }

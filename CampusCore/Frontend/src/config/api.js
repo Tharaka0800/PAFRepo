@@ -1,9 +1,25 @@
 export const API_BASE_URL = '/api/v1';
 
+export const getCurrentUserFromToken = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      username: payload.sub,
+      role: payload.role,
+    };
+  } catch (error) {
+    return null;
+  }
+};
+
 export const fetchWithAuth = async (url, options = {}) => {
+  const currentUser = getCurrentUserFromToken();
   const headers = {
-    'X-User-Id': 'user_123', // Hardcoded for Module C, to be replaced with real Auth later
-    'X-User-Name': 'John Doe',
+    'X-User-Id': currentUser?.username || 'anonymous_user',
+    'X-User-Name': currentUser?.username || 'Anonymous User',
     ...options.headers,
   };
   

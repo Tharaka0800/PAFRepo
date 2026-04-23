@@ -43,7 +43,7 @@ const TechnicianDashboard = ({ user, onViewTicket }) => {
   const handleResolve = async (id) => {
     try {
       await fetchWithAuth(`/tickets/${id}/status`, {
-        method: 'PATCH', // Following the convention you specified
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -69,9 +69,9 @@ const TechnicianDashboard = ({ user, onViewTicket }) => {
   };
 
   // Filter based on user instructions
-  const availableJobs = tickets.filter(t => t.status === 'OPEN');
-  const activeTasks = tickets.filter(t => t.status === 'IN_PROGRESS');
-  const completedHistory = tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED');
+  const availableJobs = tickets.filter(t => t.status === 'OPEN' && !t.assignedTechnicianId);
+  const activeTasks = tickets.filter(t => t.status === 'IN_PROGRESS' && t.assignedTechnicianId === user.username);
+  const completedHistory = tickets.filter(t => (t.status === 'RESOLVED' || t.status === 'CLOSED') && t.assignedTechnicianId === user.username);
 
   // Shared Card component with color-coding logic embedded
   const TicketCard = ({ ticket, children }) => (
