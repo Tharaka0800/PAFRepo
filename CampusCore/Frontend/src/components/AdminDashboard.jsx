@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchWithAuth } from '../config/api';
+import RoleManagement from './RoleManagement';
 
 const AdminDashboard = ({ user, onViewTicket }) => {
   const [tickets, setTickets] = useState([]);
@@ -73,6 +74,9 @@ const AdminDashboard = ({ user, onViewTicket }) => {
     }
   };
 
+  // Tab State
+  const [activeTab, setActiveTab] = useState('tickets');
+
   // Stats calculation
   const totalTickets = tickets.length;
   const openIncidents = tickets.filter(t => t.status === 'OPEN').length;
@@ -129,38 +133,72 @@ const AdminDashboard = ({ user, onViewTicket }) => {
           margin-bottom: 8px;
           color: var(--purple-main);
         }
+        .tab-btn {
+          padding: 10px 24px;
+          border: none;
+          background: none;
+          cursor: pointer;
+          font-weight: 600;
+          color: var(--text-muted);
+          border-bottom: 3px solid transparent;
+          transition: all 0.3s;
+        }
+        .tab-btn.active {
+          color: var(--purple-main);
+          border-bottom-color: var(--purple-main);
+        }
       `}</style>
 
-      <div className="header" style={{ marginBottom: '24px' }}>
-        <h1>Admin Moderation Dashboard</h1>
-      </div>
-
-      {/* Top Row: Statistics */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, width: "100%", marginBottom: "30px" }}>
-        <div className="stat-card" style={{ borderTop: '4px solid var(--purple-main)' }}>
-          <div className="stat-icon">📊</div>
-          <div className="stat-card-title">Total Tickets</div>
-          <div className="stat-card-value">{totalTickets}</div>
+      <div className="header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <h1 style={{ margin: 0 }}>Admin Dashboard</h1>
+          <p className="text-muted" style={{ margin: '8px 0 0' }}>Welcome back, {user.username}</p>
         </div>
-        <div className="stat-card" style={{ borderTop: '4px solid var(--danger-color)' }}>
-          <div className="stat-icon">🔥</div>
-          <div className="stat-card-title">Open Incidents</div>
-          <div className="stat-card-value">{openIncidents}</div>
-        </div>
-        <div className="stat-card" style={{ borderTop: '4px solid var(--warning-color)' }}>
-          <div className="stat-icon">⏳</div>
-          <div className="stat-card-title">Pending Assignments</div>
-          <div className="stat-card-value">{pendingAssignments}</div>
-        </div>
-        <div className="stat-card" style={{ borderTop: '4px solid var(--success-color)' }}>
-          <div className="stat-icon">✅</div>
-          <div className="stat-card-title">Resolved Successfully</div>
-          <div className="stat-card-value">{resolvedCount}</div>
+        
+        <div style={{ display: 'flex', background: 'white', borderRadius: '10px', padding: '4px', boxShadow: 'var(--glass-shadow)' }}>
+          <button 
+            className={`tab-btn ${activeTab === 'tickets' ? 'active' : ''}`}
+            onClick={() => setActiveTab('tickets')}
+          >
+            Ticket Moderation
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'roles' ? 'active' : ''}`}
+            onClick={() => setActiveTab('roles')}
+          >
+            Role Management
+          </button>
         </div>
       </div>
 
-      {/* Main Section: The Table */}
-      <div className="table-container">
+      {activeTab === 'tickets' ? (
+        <>
+          {/* Top Row: Statistics */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, width: "100%", marginBottom: "30px" }}>
+            <div className="stat-card" style={{ borderTop: '4px solid var(--purple-main)' }}>
+              <div className="stat-icon">📊</div>
+              <div className="stat-card-title">Total Tickets</div>
+              <div className="stat-card-value">{totalTickets}</div>
+            </div>
+            <div className="stat-card" style={{ borderTop: '4px solid var(--danger-color)' }}>
+              <div className="stat-icon">🔥</div>
+              <div className="stat-card-title">Open Incidents</div>
+              <div className="stat-card-value">{openIncidents}</div>
+            </div>
+            <div className="stat-card" style={{ borderTop: '4px solid var(--warning-color)' }}>
+              <div className="stat-icon">⏳</div>
+              <div className="stat-card-title">Pending Assignments</div>
+              <div className="stat-card-value">{pendingAssignments}</div>
+            </div>
+            <div className="stat-card" style={{ borderTop: '4px solid var(--success-color)' }}>
+              <div className="stat-icon">✅</div>
+              <div className="stat-card-title">Resolved Successfully</div>
+              <div className="stat-card-value">{resolvedCount}</div>
+            </div>
+          </div>
+
+          {/* Main Section: The Table */}
+          <div className="table-container">
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px' }}>Loading Data...</div>
         ) : (
@@ -225,6 +263,10 @@ const AdminDashboard = ({ user, onViewTicket }) => {
           </table>
         )}
       </div>
+    </>
+    ) : (
+        <RoleManagement token={localStorage.getItem('token')} />
+    )}
 
       {/* Reject Modal */}
       {rejectingTicketId && (

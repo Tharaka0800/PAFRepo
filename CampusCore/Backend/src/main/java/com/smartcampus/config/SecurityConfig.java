@@ -36,7 +36,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/login/oauth2/**", "/oauth2/**").permitAll()
+                .requestMatchers("/api/auth/**", "/login/oauth2/**", "/oauth2/**", "/ws-notifications/**").permitAll()
                 .requestMatchers("/api/v1/**").permitAll() // For testing, permit all to see if it works
                 .anyRequest().authenticated()
             )

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 const NotificationsPanel = ({ token, role }) => {
     const [notifications, setNotifications] = useState([]);
@@ -11,7 +13,32 @@ const NotificationsPanel = ({ token, role }) => {
 
     useEffect(() => {
         fetchNotifications();
-    }, []);
+        
+        // Setup WebSocket connection
+        const socket = new SockJS('http://localhost:8080/ws-notifications');
+        const client = new Client({
+            webSocketFactory: () => socket,
+            onConnect: () => {
+                console.log('Connected to WebSocket');
+                client.subscribe(`/topic/notifications/${role}`, (message) => {
+                    const newNotif = JSON.parse(message.body);
+                    setNotifications(prev => [newNotif, ...prev]);
+                });
+            },
+            onStompError: (frame) => {
+                console.error('Broker reported error: ' + frame.headers['message']);
+                console.error('Additional details: ' + frame.body);
+            }
+        });
+
+        client.activate();
+
+        return () => {
+            if (client.active) {
+                client.deactivate();
+            }
+        };
+    }, [role]);
 
     const fetchNotifications = async () => {
         try {

@@ -15,8 +15,14 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate;
+
     public Notification createNotification(Notification notification) {
-        return notificationRepository.save(notification);
+        Notification saved = notificationRepository.save(notification);
+        // Push notification to specific role topic
+        messagingTemplate.convertAndSend("/topic/notifications/" + saved.getTargetRole(), saved);
+        return saved;
     }
 
     public List<Notification> getNotificationsByRole(Role role) {
