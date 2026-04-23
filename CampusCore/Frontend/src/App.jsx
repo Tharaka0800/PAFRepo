@@ -30,6 +30,7 @@ function App() {
           username: payload.sub,
           role: payload.role
         });
+        setCurrentView('dashboard');
       } catch (e) {
         handleLogout();
       }
@@ -38,6 +39,7 @@ function App() {
 
   const handleLoginSuccess = (newToken) => {
     setToken(newToken);
+    setCurrentView('dashboard');
   };
 
   const handleLogout = () => {
