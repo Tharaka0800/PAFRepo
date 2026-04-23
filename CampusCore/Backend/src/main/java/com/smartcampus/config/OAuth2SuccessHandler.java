@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -19,6 +20,9 @@ import java.util.UUID;
 
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    @Value("${app.frontend.url:http://localhost:5173}")
+    private String frontendUrl;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -53,7 +57,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
 
         // Redirect to Frontend with token in URL
-        String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/login")
+        String targetUrl = UriComponentsBuilder.fromUriString(frontendUrl + "/login")
                 .queryParam("token", token)
                 .build().toUriString();
 

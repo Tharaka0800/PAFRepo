@@ -4,9 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,8 +18,17 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Use a secure key in production
+    @Value("${app.jwt.secret:CampusCoreJwtSecretKeyForLocalDevelopmentOnly1234567890}")
+    private String jwtSecret;
+
+    private Key key;
     private final long expirationTime = 86400000; // 1 day
+
+    @PostConstruct
+    public void init() {
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
