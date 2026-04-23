@@ -9,6 +9,7 @@ import Login from './components/Login';
 import NotificationsPanel from './components/NotificationsPanel';
 import FacilitiesCatalog from './components/FacilitiesCatalog';
 import BookingWorkflow from './components/BookingWorkflow';
+import ProfilePage from './components/ProfilePage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './components/HomePage';
@@ -99,6 +100,7 @@ const AuthenticatedLayout = ({
     if (location.pathname.startsWith('/facilities')) return 'facilities';
     if (location.pathname.startsWith('/bookings')) return 'bookings';
     if (location.pathname.startsWith('/notifications')) return 'notifications';
+    if (location.pathname.startsWith('/profile')) return 'profile';
     return 'dashboard';
   }, [location.pathname]);
 
@@ -115,6 +117,9 @@ const AuthenticatedLayout = ({
         break;
       case 'notifications':
         navigate('/notifications');
+        break;
+      case 'profile':
+        navigate('/profile');
         break;
       default:
         navigate('/');
@@ -339,6 +344,17 @@ function App() {
             <ProtectedRoute user={user} authReady={authReady}>
               <AuthenticatedLayout user={user} token={token} onLogout={handleLogout}>
                 <NotificationsPanel token={token} role={user?.role} user={user} />
+              </AuthenticatedLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute user={user} authReady={authReady}>
+              <AuthenticatedLayout user={user} token={token} onLogout={handleLogout}>
+                <ProfilePage token={token} user={user} />
               </AuthenticatedLayout>
             </ProtectedRoute>
           }

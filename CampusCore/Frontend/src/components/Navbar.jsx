@@ -12,6 +12,7 @@ const Navbar = ({ currentView, onNavigate, user, onLogout }) => {
     { id: 'facilities', label: 'Facilities' },
     { id: 'bookings', label: 'Bookings' },
     { id: 'notifications', label: 'Alerts' },
+    { id: 'profile', label: 'Profile' },
   ];
 
   return (
