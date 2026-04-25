@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -32,12 +34,17 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public String login(String username, String password) {
+    public Map<String, String> login(String username, String password) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return jwtUtil.generateToken(username, user.getRole().name());
+                String token = jwtUtil.generateToken(username, user.getRole().name());
+                Map<String, String> response = new HashMap<>();
+                response.put("token", token);
+                response.put("role", user.getRole().name());
+                response.put("username", user.getUsername());
+                return response;
             }
         }
         throw new RuntimeException("Invalid username or password");

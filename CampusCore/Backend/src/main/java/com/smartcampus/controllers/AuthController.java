@@ -32,10 +32,8 @@ public class AuthController {
         try {
             String username = credentials.get("username");
             String password = credentials.get("password");
-            String token = authService.login(username, password);
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-            return ResponseEntity.ok(response);
+            Map<String, String> loginResponse = authService.login(username, password);
+            return ResponseEntity.ok(loginResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

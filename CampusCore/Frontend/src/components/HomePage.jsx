@@ -16,7 +16,7 @@ const HomePage = () => {
         <div className="public-topbar-links">
           <a href="#features">Features</a>
           <a href="#flows">User Paths</a>
-          <Link to="/student/login" className="btn btn-secondary">
+          <Link to="/login" className="btn btn-secondary">
             Login
           </Link>
         </div>
@@ -36,14 +36,8 @@ const HomePage = () => {
         </p>
 
         <div className="public-hero-actions">
-          <Link to="/student/login" className="btn-hero">
-            Student Login
-          </Link>
-          <Link to="/admin/login" className="btn btn-secondary public-hero-secondary">
-            Admin Login
-          </Link>
-          <Link to="/technician/login" className="btn btn-secondary public-hero-secondary">
-            Technician Login
+          <Link to="/login" className="btn-hero">
+            Login to Portal
           </Link>
         </div>
       </section>
@@ -87,28 +81,27 @@ const HomePage = () => {
 
       <div id="flows" className="glass-panel public-flow-panel">
         <div className="public-flow-copy">
-          <h2>Standard website flow</h2>
+          <h2>Unified authentication flow</h2>
           <p>
-            Public landing page first, then role-based login paths, and finally direct dashboard routing based
-            on the authenticated role.
+            Single login page for all roles with automatic dashboard routing. Students can self-register, while admin and technician accounts are managed by administrators.
           </p>
         </div>
 
         <div className="public-flow-grid">
           <div className="public-flow-card">
-            <span className="public-flow-label">Student</span>
-            <strong>/student/login</strong>
-            <p>Students can create an account and then continue to `/student/dashboard`.</p>
+            <span className="public-flow-label">Unified Login</span>
+            <strong>/login</strong>
+            <p>Single login page for all users. Students can create accounts, while admins and technicians use pre-created credentials.</p>
           </div>
           <div className="public-flow-card">
-            <span className="public-flow-label">Admin</span>
-            <strong>/admin/login</strong>
-            <p>Admins sign in only, with no self-registration, and land at `/admin/dashboard`.</p>
+            <span className="public-flow-label">Auto-Routing</span>
+            <strong>Role-Based</strong>
+            <p>After login, users are automatically redirected to their appropriate dashboard based on their role.</p>
           </div>
           <div className="public-flow-card">
-            <span className="public-flow-label">Technician</span>
-            <strong>/technician/login</strong>
-            <p>Technicians sign in through a dedicated access page and go directly to `/technician/dashboard`.</p>
+            <span className="public-flow-label">Dashboards</span>
+            <strong>3 Role Types</strong>
+            <p>Students, admins, and technicians each have their own specialized dashboard with role-specific features.</p>
           </div>
         </div>
       </div>
