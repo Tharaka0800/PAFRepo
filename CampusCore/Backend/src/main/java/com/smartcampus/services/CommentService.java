@@ -16,6 +16,7 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     public TicketComment addComment(TicketComment comment) {
+        comment.setCreatedAt(java.time.LocalDateTime.now());
         return commentRepository.save(comment);
     }
 

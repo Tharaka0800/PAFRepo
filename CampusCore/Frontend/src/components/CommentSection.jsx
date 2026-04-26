@@ -10,6 +10,22 @@ const CommentSection = ({ ticketId, currentUserId, currentUserName }) => {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState('');
 
+  const formatCommentDate = (value) => {
+    const date = value ? new Date(value) : new Date();
+    if (isNaN(date.getTime())) {
+      return new Date().toLocaleString();
+    }
+    return date.toLocaleString();
+  };
+
+  const getAlertMessage = (message) => {
+    if (!message) return '🌟 Something went wrong. Let\'s try that again!';
+    if (message.toLowerCase().includes('connection lost') || message.toLowerCase().includes('no response')) {
+      return '☁️ Cloud Connection Issue: The server is taking a quick nap. Try again in a bit!';
+    }
+    return message;
+  };
+
   useEffect(() => {
     loadComments();
   }, [ticketId]);
@@ -19,7 +35,8 @@ const CommentSection = ({ ticketId, currentUserId, currentUserName }) => {
       const data = await fetchWithAuth(`/tickets/${ticketId}/comments`);
       setComments(data);
     } catch (err) {
-      console.error(err);
+      console.error('Failed to load comments:', err);
+      alert(getAlertMessage(err.message));
     }
   };
 
@@ -28,50 +45,51 @@ const CommentSection = ({ ticketId, currentUserId, currentUserName }) => {
     setLoading(true);
     try {
       const payload = { text: newComment };
-      const response = await fetch(`${API_BASE_URL}/tickets/${ticketId}/comments`, {
+      await fetchWithAuth(`/tickets/${ticketId}/comments`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-User-Id': currentUserId,
-          'X-User-Name': currentUserName
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
       });
-      if(response.ok) {
-        setNewComment('');
-        loadComments();
-      }
+      setNewComment('');
+      loadComments();
     } catch(err) {
-      console.error(err);
+      console.error('Failed to post comment:', err);
+      alert(getAlertMessage(err.message));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if(!window.confirm('Delete comment?')) return;
+    if (!window.confirm('are you want to delete')) return;
     try {
-      await fetch(`${API_BASE_URL}/comments/${id}`, {
-        method: 'DELETE',
-        headers: { 'X-User-Id': currentUserId }
+      await fetchWithAuth(`/comments/${id}`, {
+        method: 'DELETE'
       });
       loadComments();
+      alert('You delete comment');
     } catch(err) {
-      console.error(err);
+      console.error('Failed to delete comment:', err);
+      alert(getAlertMessage(err.message));
     }
   };
 
   const handleEdit = async (id) => {
+    if (!window.confirm('are you want to update')) return;
     try {
-      await fetch(`${API_BASE_URL}/comments/${id}`, {
+      await fetchWithAuth(`/comments/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'X-User-Id': currentUserId },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({text: editText})
       });
       setEditingId(null);
       loadComments();
+      alert('comment update sucessfully');
     } catch(err) {
-      console.error(err);
+      console.error('Failed to edit comment:', err);
+      alert(getAlertMessage(err.message));
     }
   };
 
@@ -109,9 +127,8 @@ const CommentSection = ({ ticketId, currentUserId, currentUserName }) => {
                 </div>
                 <span className="comment-author">{c.authorName} {c.userId === currentUserId && '(You)'}</span>
               </div>
-              <span className="comment-date">{new Date(c.createdAt).toLocaleString()}</span>
+              <span className="comment-date">{formatCommentDate(c.createdAt)}</span>
             </div>
-            
             {editingId === c.id ? (
               <div>
                 <textarea className="input-field" rows="2" value={editText} onChange={e => setEditText(e.target.value)} style={{marginBottom: '8px'}}></textarea>
@@ -121,15 +138,15 @@ const CommentSection = ({ ticketId, currentUserId, currentUserName }) => {
                 </div>
               </div>
             ) : (
-                <>
+              <>
                 <div style={{color: 'var(--text-dark)', fontSize: '0.95rem', whiteSpace: 'pre-wrap'}}>{c.text}</div>
                 {c.userId === currentUserId && (
-                    <div style={{display: 'flex', gap: '12px', marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #e2e8f0'}}>
-                      <button onClick={()=>{setEditingId(c.id); setEditText(c.text)}} style={{fontSize: '0.8rem', color: 'var(--secondary-color)', background: 'none', border: 'none', cursor: 'pointer', padding: 0}}>Edit</button>
-                      <button onClick={()=>{handleDelete(c.id)}} style={{fontSize: '0.8rem', color: 'var(--danger-color)', background: 'none', border: 'none', cursor: 'pointer', padding: 0}}>Delete</button>
-                    </div>
+                  <div style={{display: 'flex', gap: '12px', marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #e2e8f0'}}>
+                    <button onClick={()=>{setEditingId(c.id); setEditText(c.text)}} style={{fontSize: '0.8rem', color: 'var(--secondary-color)', background: 'none', border: 'none', cursor: 'pointer', padding: 0}}>Edit</button>
+                    <button onClick={()=>{handleDelete(c.id)}} style={{fontSize: '0.8rem', color: 'var(--danger-color)', background: 'none', border: 'none', cursor: 'pointer', padding: 0}}>Delete</button>
+                  </div>
                 )}
-                </>
+              </>
             )}
           </div>
         ))}

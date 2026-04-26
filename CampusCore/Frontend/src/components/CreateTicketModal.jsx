@@ -12,6 +12,7 @@ const CreateTicketModal = ({ onClose, onSuccess }) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -33,6 +34,29 @@ const CreateTicketModal = ({ onClose, onSuccess }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setFieldErrors({});
+
+    let hasErrors = false;
+    const newFieldErrors = {};
+
+    if (formData.description.length < 20 || formData.description.length > 200) {
+      newFieldErrors.description = 'Description must have minimum 20 characters and maximum 200 characters';
+      hasErrors = true;
+    }
+
+    // Check if preferred contact is a phone number (contains only digits)
+    if (/^\d+$/.test(formData.preferredContact)) {
+      if (formData.preferredContact.length !== 10) {
+        newFieldErrors.preferredContact = 'phone number contain 10 digits';
+        hasErrors = true;
+      }
+    }
+
+    if (hasErrors) {
+      setFieldErrors(newFieldErrors);
+      setLoading(false);
+      return;
+    }
 
     const submitData = new FormData();
     // Convert text inputs to JSON blob for @RequestParam in Spring Boot
@@ -67,10 +91,23 @@ const CreateTicketModal = ({ onClose, onSuccess }) => {
   };
 // Handle input changes for text fields and selects
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    
+    if (name === 'preferredContact' && /^\d+$/.test(value) && value.length > 10) {
+      return;
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+
+    if (fieldErrors[name]) {
+      setFieldErrors({
+        ...fieldErrors,
+        [name]: null
+      });
+    }
   };
 
   return (
@@ -110,11 +147,13 @@ const CreateTicketModal = ({ onClose, onSuccess }) => {
           <div className="form-group">
             <label className="label">Description</label>
             <textarea name="description" className="input-field" required rows="4" value={formData.description} onChange={handleChange} placeholder="Describe the issue in detail..."></textarea>
+            {fieldErrors.description && <div style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '4px' }}>{fieldErrors.description}</div>}
           </div>
 
           <div className="form-group">
             <label className="label">Preferred Contact Number / Email</label>
             <input type="text" name="preferredContact" className="input-field" required value={formData.preferredContact} onChange={handleChange} />
+            {fieldErrors.preferredContact && <div style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '4px' }}>{fieldErrors.preferredContact}</div>}
           </div>
 
           <div className="form-group">
