@@ -5,7 +5,7 @@ import TechnicianDashboard from './components/TechnicianDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import CreateTicketModal from './components/CreateTicketModal';
 import TicketDetailsPage from './components/TicketDetailsPage';
-import Login from './components/Login';
+import UnifiedLogin from './components/UnifiedLogin';
 import NotificationsPanel from './components/NotificationsPanel';
 import FacilitiesCatalog from './components/FacilitiesCatalog';
 import BookingWorkflow from './components/BookingWorkflow';
@@ -34,16 +34,7 @@ const getDashboardPath = (role) => {
   }
 };
 
-const getLoginPath = (role) => {
-  switch (role) {
-    case 'ADMIN':
-      return '/admin/login';
-    case 'TECHNICIAN':
-      return '/technician/login';
-    default:
-      return '/student/login';
-  }
-};
+const getLoginPath = () => '/login';
 
 const ProtectedRoute = ({ user, requiredRole, authReady, children }) => {
   if (!authReady) {
@@ -51,7 +42,7 @@ const ProtectedRoute = ({ user, requiredRole, authReady, children }) => {
   }
 
   if (!user) {
-    return <Navigate to={requiredRole ? getLoginPath(requiredRole) : '/student/login'} replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (requiredRole && user.role !== requiredRole) {
@@ -210,51 +201,20 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
 
+        {/* Single unified login for all roles */}
         <Route
-          path="/student/login"
+          path="/login"
           element={
             <PublicRoute user={user} authReady={authReady}>
-              <Login
-                title="Student Portal Access"
-                subtitle="Sign in to your student workspace or create a new account."
-                allowRegister
-                defaultRole="STUDENT"
-                roleHint="Student"
-                onLoginSuccess={handleLoginSuccess}
-              />
+              <UnifiedLogin onLoginSuccess={handleLoginSuccess} />
             </PublicRoute>
           }
         />
-        <Route
-          path="/admin/login"
-          element={
-            <PublicRoute user={user} authReady={authReady}>
-              <Login
-                title="Administrator Access"
-                subtitle="Secure sign in for authorized campus administrators."
-                allowRegister={false}
-                defaultRole="ADMIN"
-                roleHint="Admin"
-                onLoginSuccess={handleLoginSuccess}
-              />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/technician/login"
-          element={
-            <PublicRoute user={user} authReady={authReady}>
-              <Login
-                title="Technician Access"
-                subtitle="Sign in to manage assigned operational tickets and service requests."
-                allowRegister={false}
-                defaultRole="TECHNICIAN"
-                roleHint="Technician"
-                onLoginSuccess={handleLoginSuccess}
-              />
-            </PublicRoute>
-          }
-        />
+
+        {/* Redirect old login routes to unified login */}
+        <Route path="/student/login" element={<Navigate to="/login" replace />} />
+        <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+        <Route path="/technician/login" element={<Navigate to="/login" replace />} />
 
         <Route
           path="/student/dashboard"
